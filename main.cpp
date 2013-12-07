@@ -34,25 +34,27 @@ QStringList file_ext;
 //TODO: Add ignore list
 
 void
-list_files(QString currentPath, QXmlStreamWriter &stream, QString basePath) {
-    QDir dir(currentPath);
+list_files(const QString current_path,
+           QXmlStreamWriter &stream,
+           const QString base_path)
+{
+    QDir dir(current_path);
 
-    QStringList knownFiles;
     if (dir.exists())
     {
-        QStringList myFiles = dir.entryList(knownFiles, QDir::Files);
+        QStringList folder_files = dir.entryList(QDir::Files);
         /* Add all of the files */
-        foreach (QString sFileName, myFiles) {
-            QFileInfo fi(currentPath + QDir::separator() + sFileName);
+        foreach (QString file_name, folder_files) {
+            QFileInfo fi(current_path + QDir::separator() + file_name);
             if (file_ext.indexOf(fi.suffix().toLower()) >= 0) {
                 stream.writeStartElement("url");
-                QString outputFolder = currentPath;
-                outputFolder.replace(basePath, "");
-                if (outputFolder.left(1) == "/" || outputFolder.left(1) == "\\")
-                    outputFolder.remove(0,1);
-                if (!outputFolder.isEmpty() && outputFolder.right(1) != "/")
-                    outputFolder += "/";
-                stream.writeTextElement("loc", outputFolder + sFileName);
+                QString output_folder = current_path;
+                output_folder.replace(base_path, "");
+                if (output_folder.left(1) == "/" || output_folder.left(1) == "\\")
+                    output_folder.remove(0,1);
+                if (!output_folder.isEmpty() && output_folder.right(1) != "/")
+                    output_folder += "/";
+                stream.writeTextElement("loc", output_folder + file_name);
                 stream.writeTextElement("lastmod", fi.lastModified().toString(Qt::ISODate));
                 stream.writeTextElement("changefreq", "daily");
                 stream.writeTextElement("priority", "0.5");
@@ -60,10 +62,15 @@ list_files(QString currentPath, QXmlStreamWriter &stream, QString basePath) {
             }
         }
 
-        QStringList myFolders = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+        QStringList folder_folders = dir.entryList(
+                    QDir::Dirs | QDir::NoDotAndDotDot);
         /* Add all of the folders */
-        foreach (QString sFolderName, myFolders) {
-            list_files(currentPath + QDir::separator() + sFolderName, stream, basePath);
+        foreach (QString folder_name, folder_folders) {
+            list_files(current_path
+                       + QDir::separator()
+                       + folder_name,
+                       stream,
+                       base_path);
         }
     }
 }
