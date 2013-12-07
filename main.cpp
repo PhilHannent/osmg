@@ -110,6 +110,7 @@ int main(int argc, char *argv[])
 
     /* Fetch folder to test and the name of the output file */
     QString source_path(QDir::currentPath());
+    QString destination_path(QDir::currentPath());
     QString output_file("sitemap.xml");
     QCommandLineParser parser;
     parser.setApplicationDescription("Offline Sitemap Generator");
@@ -131,7 +132,12 @@ int main(int argc, char *argv[])
     parser.addOption(ext_option);
     parser.process(app);
     const QStringList args = parser.positionalArguments();
-    source_path = args.at(0);
+
+    if (args.size() > 0 && !args.at(0).isEmpty())
+        source_path = args.at(0);
+
+    if (args.size() > 1 && !args.at(1).isEmpty())
+        destination_path = args.at(1);
 
     QString add_extensions = parser.value(ext_option);
     if (!add_extensions.isEmpty())
@@ -170,7 +176,12 @@ int main(int argc, char *argv[])
     if (myFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream reader(&myFile);
         QString myData = reader.readAll();
-        gzFile fi = (gzFile)gzopen("sitemap.xml.gz","wb");
+        if (destination_path.right(1) != QDir::separator())
+            destination_path += QDir::separator();
+
+        destination_path += "sitemap.xml.gz";
+        gzFile fi = (gzFile)gzopen(destination_path.toLocal8Bit().data()
+                                   ,"wb");
         gzwrite(fi,myData.toLatin1(),myData.size());
         gzclose(fi);
     }
