@@ -50,15 +50,20 @@ list_files(const QString current_path,
                 stream.writeStartElement("url");
                 QString output_folder = current_path;
                 output_folder.replace(base_path, "");
-                if (output_folder.left(1) == "/" || output_folder.left(1) == "\\")
+                /* Remove the root marker */
+                if (output_folder.left(1) == "/"
+                        || output_folder.left(1) == "\\")
                     output_folder.remove(0,1);
-                if (!output_folder.isEmpty() && output_folder.right(1) != "/")
+                /* Add the last folder marker */
+                if (!output_folder.isEmpty()
+                        && output_folder.right(1) != "/")
                     output_folder += "/";
+                /* Output all the information we have */
                 stream.writeTextElement("loc", output_folder + file_name);
                 stream.writeTextElement("lastmod", fi.lastModified().toString(Qt::ISODate));
                 stream.writeTextElement("changefreq", "daily");
                 stream.writeTextElement("priority", "0.5");
-                stream.writeEndElement(); /* Url */
+                stream.writeEndElement(); /* end of the Url element */
             }
         }
 
