@@ -35,7 +35,6 @@ QStringList file_ext;
 
 void
 list_files(QString currentPath, QXmlStreamWriter &stream, QString basePath) {
-    /* Now check each file and output the details, also create the md5 file */
     QDir dir(currentPath);
 
     QStringList knownFiles;
@@ -149,12 +148,9 @@ int main(int argc, char *argv[])
     QXmlStreamWriter stream(&myFile);
     stream.setAutoFormatting(true);
     stream.writeStartDocument();
-    //stream.writeCharacters("<?xml version='1.0' encoding='UTF-8'?>");
     stream.writeStartElement("urlset");
     stream.writeNamespace("http://www.sitemaps.org/schemas/sitemap/0.9");
-    //qDebug() << "about to check folders";
     list_files(source_path, stream, source_path);
-    //qDebug() << "output the list to the file";
     stream.writeEndElement(); /* urlset */
     stream.writeEndDocument();
     myFile.flush();
