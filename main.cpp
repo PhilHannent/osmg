@@ -76,13 +76,26 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("Offline Sitemap Generator");
     QCoreApplication::setApplicationVersion("1.0");
 
-    file_ext << "htm"
-             << "php"
-             << "asp"
+    file_ext << "asp"
              << "aspx"
+             << "cfm"
+             << "do"
+             << "htm"
+             << "html"
+             << "jhtml"
              << "jsp"
+             << "jspx"
+             << "php"
+             << "php4"
+             << "php3"
+             << "phtml"
              << "py"
-             << "shtml";
+             << "rb"
+             << "rhtml"
+             << "rss"
+             << "shtml"
+             << "xhtml"
+             << "yaws";
 
     /* Fetch folder to test and the name of the output file */
     QString source_path(QDir::currentPath());
