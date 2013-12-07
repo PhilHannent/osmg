@@ -10,3 +10,7 @@ to your upload.
 This is most useful as a post checkout hook for git or before scripting your
 uploads. Personally I've used it for creating the sitemap before uploading 
 to a content delivery network that only supports flat files.
+
+Current dependencies are:
+Qt 5.2
+zlib
